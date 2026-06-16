@@ -1,9 +1,9 @@
-import getClientes from '../services/clientesService';
+import clientesService from '../services/clientesService';
 import ClienteCard from '../components/ClienteCard';
 
 function ListaClientes() {
 
-    const clientes = getClientes();
+    const clientes = clientesService().getClientes();
 
 return (
     <div>
