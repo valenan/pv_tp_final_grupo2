@@ -1,9 +1,9 @@
 # Integrantes
 
-Franco Guanactolay: franclyc
-Fabricio Chosco: fabrippp
-Inti Aragon: inti36
-Valentin Angulo: valenan
+Franco Guanactolay: franclyc <br>
+Fabricio Chosco: fabrippp <br>
+Inti Aragon: inti36 <br>
+Valentin Angulo: valenan 
 
 
 ### Importante
