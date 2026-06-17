@@ -30,8 +30,9 @@ const clientesService = () => {
         return [...clientes];
     };
 
-    return {
+     return {
         getClientes,
+        getClienteById
     };
 };
 
