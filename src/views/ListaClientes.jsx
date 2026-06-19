@@ -19,20 +19,22 @@ function ListaClientes() {
     return (
         <div>
             <h1>Pagina de listado de Clientes</h1>
-            <div className='buscador'>
-            <Form>
+            <Form className='buscador'>
             <Form.Control
             placeholder='Apellido o Lugar'
             value={busqueda}
             onChange={handleBusqueda}
             ></Form.Control>
             </Form>
-            </div>
+            <Container>
+    <Row>
         {clientes.map(cliente => (
-                <ClienteCard
-                key= {cliente.id}
-                cliente={cliente} />
+            <Col xs={12} sm={6} md={4} lg={4} xl={4} xxl={4} key={cliente.id}>
+                <ClienteCard cliente={cliente} />
+            </Col>
         ))}
+    </Row>
+</Container>
         </div>
     );
 }
