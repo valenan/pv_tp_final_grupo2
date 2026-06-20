@@ -1,3 +1,4 @@
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { AdminProvider } from './context/AdminContext';
 import Header from './components/layout/Header';
 import RutaProtegida from './components/common/RutaProtegida';
