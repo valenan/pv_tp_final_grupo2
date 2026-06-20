@@ -31,5 +31,5 @@ function AdminProvider({ children }) {
         </AdminContext.Provider>
     );
 }
-
+//Agrego mi nombre al componente
 export { AdminProvider };
