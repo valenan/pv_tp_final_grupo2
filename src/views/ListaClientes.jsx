@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import clientesService from '../services/clientesService';
-import ClienteCard from '../components/ClienteCard';
+import ClienteCard from '../components/common/ClienteCard';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
