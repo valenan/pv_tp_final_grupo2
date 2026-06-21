@@ -7,6 +7,7 @@ import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Spinner from 'react-bootstrap/Spinner';
 import Alert from 'react-bootstrap/Alert';
+import '../assets/styles/listaClientes.css'
 
 function ListaClientes() {
 
@@ -75,8 +76,9 @@ function ListaClientes() {
     return (
         <div>
             <h1>Pagina de listado de Clientes</h1>
-            <Form className='buscador'>
+            <Form>
                 <Form.Control
+                className='buscador'
                     placeholder='Apellido o Lugar'
                     value={busqueda}
                     onChange={handleBusqueda}
