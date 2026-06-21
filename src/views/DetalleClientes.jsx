@@ -24,14 +24,12 @@ function DetalleClientes() {
 
                 if (clientesLocales) {
                     const lista = JSON.parse(clientesLocales);
-                    // Buscamos si el ID de la URL coincide con alguno de la lista local
                     clienteEncontrado = lista.find(c => c.id === parseInt(id));
                 }
 
                 if (clienteEncontrado) {
                     setCliente(clienteEncontrado);
                 } else {
-                    // Si no está en LocalStorage, recurrimos de forma asrincrónica a la API
                     const response = await fetch(`https://fakestoreapi.com/users/${id}`);
                     if (!response.ok) {
                         throw new Error("No se pudo obtener la información del servidor remoto.");
