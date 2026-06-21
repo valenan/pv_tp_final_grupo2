@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 
 function ClienteCard({ cliente }) {
-    const { id, name, email, phone, address } = cliente;
+    const { id, name, email, phone, address } = cliente;//
 
     return (
         <Card className="mb-4 flex-fill">

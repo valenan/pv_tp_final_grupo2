@@ -8,6 +8,7 @@ import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Spinner from 'react-bootstrap/Spinner';
 import Alert from 'react-bootstrap/Alert';
+import '../assets/styles/listaClientes.css'
 
 function ListaClientes() {
 
