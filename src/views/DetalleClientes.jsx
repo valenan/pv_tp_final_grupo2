@@ -12,12 +12,40 @@ const DetalleClientes = () => {
     const { id } = useParams();
     const { admin } = useContext(AdminContext);
     const [cliente, setCliente] = useState(null);
+    const [error, setError] = useState("");
 
     useEffect(() => {
-        fetch(`https://fakestoreapi.com/users/${id}`)
-            .then(res => res.json())
-            .then(data => setCliente(data));
+        const obtenerDetalle = async () => {
+            try {
+                setError("");
+                
+                const clientesLocales = localStorage.getItem('lista_clientes');
+                let clienteEncontrado = null;
+
+                if (clientesLocales) {
+                    const lista = JSON.parse(clientesLocales);
+                    clienteEncontrado = lista.find(c => c.id === parseInt(id));
+                }
+
+                if (clienteEncontrado) {
+                    setCliente(clienteEncontrado);
+                } else {
+                    const response = await fetch(`https://fakestoreapi.com/users/${id}`);
+                    if (!response.ok) {
+                        throw new Error("No se pudo obtener la información del servidor remoto.");
+                    }
+                    const data = await response.json();
+                    setCliente(data);
+                }
+            } catch (err) {
+                console.error(err);
+                setError(err.message);
+            }
+        };
+
+        obtenerDetalle();
     }, [id]);
+
     const eliminarCliente = async () => {
         try {
             await fetch(
@@ -26,14 +54,36 @@ const DetalleClientes = () => {
                     method: "DELETE"
                 }
             );
-            alert("Cliente eliminado");
+
+            const clientesLocales = localStorage.getItem('lista_clientes');
+            if (clientesLocales) {
+                const lista = JSON.parse(clientesLocales);
+                const listaFiltrada = lista.filter(c => c.id !== parseInt(id));
+                localStorage.setItem('lista_clientes', JSON.stringify(listaFiltrada));
+            }
+
+            alert("Cliente eliminado de forma simulada");
         } catch (error) {
             console.error(error);
         }
     };
-    if (!cliente) {
-        return <h2>Cargando...</h2>;
+
+    if (error) {
+        return (
+            <Container className="mt-4">
+                <Alert variant="danger">Hubo un error al cargar la ficha: {error}</Alert>
+            </Container>
+        );
     }
+
+    if (!cliente) {
+        return (
+            <Container className="text-center mt-5">
+                <h2>Cargando...</h2>
+            </Container>
+        );
+    }
+
     return (
         <Container className="mt-4">
             <Card>
@@ -47,9 +97,9 @@ const DetalleClientes = () => {
                     <p>
                         <strong>Nombre:</strong>
                         {" "}
-                        {cliente.name.firstname}
+                        {cliente.name?.firstname}
                         {" "}
-                        {cliente.name.lastname}
+                        {cliente.name?.lastname}
                     </p>
                     <p>
                         <strong>Email:</strong>
@@ -64,42 +114,42 @@ const DetalleClientes = () => {
                     <hr />
                     <h5>Dirección</h5>
                     <p>
-                        Calle:
+                        <strong>Calle:</strong>
                         {" "}
-                        {cliente.address.street}
+                        {cliente.address?.street}
                     </p>
                     <p>
-                        Número:
+                        <strong>Número:</strong>
                         {" "}
-                        {cliente.address.number}
+                        {cliente.address?.number}
                     </p>
                     <p>
-                        Código Postal:
+                        <strong>Código Postal:</strong>
                         {" "}
-                        {cliente.address.zipcode}
+                        {cliente.address?.zipcode}
                     </p>
                     <p>
-                        Ciudad:
+                        <strong>Ciudad:</strong>
                         {" "}
-                        {cliente.address.city}
+                        {cliente.address?.city}
                     </p>
                     <hr />
                     <h5>Credenciales</h5>
                     <p>
-                        Usuario:
+                        <strong>Usuario:</strong>
                         {" "}
                         {cliente.username}
                     </p>
                     <p>
-                        Contraseña:
+                        <strong>Contraseña:</strong>
                         {" "}
                         {cliente.password}
                     </p>
                     {
                         admin?.sector === "Gerencia"
                         &&
-                        <Alert variant="danger">
-                            <p>
+                        <Alert variant="danger" className="mt-4">
+                            <p className="fw-bold">
                                 Permisos de Gerencia habilitados
                             </p>
                             <Button
@@ -115,5 +165,5 @@ const DetalleClientes = () => {
         </Container>
     );
 }
-
+	
 export default DetalleClientes;
