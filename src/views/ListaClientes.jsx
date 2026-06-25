@@ -9,7 +9,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import Alert from 'react-bootstrap/Alert';
 import '../assets/styles/listaClientes.css'
 
-function ListaClientes() {
+const ListaClientes = () => {
 
 
     const [allClientes, setAllClientes] = useState([]);

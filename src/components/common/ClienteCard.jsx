@@ -2,7 +2,7 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 
-function ClienteCard({ cliente }) {
+const ClienteCard =({ cliente }) => {
     const { id, name, email, phone, address } = cliente;//
 
     return (

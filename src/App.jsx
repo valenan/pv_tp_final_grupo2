@@ -6,7 +6,7 @@ import Login from './views/Login';
 import ListaClientes from './views/ListaClientes';
 import DetalleClientes from './views/DetalleClientes';
 
-function App() {
+const App = () => {
   return (
     <AdminProvider>
       <Header />

@@ -9,7 +9,7 @@ const buscarUsuario = (texto, clientes) => {
     );
 };
 
-async function obtenerClientes() {
+async const obtenerClientes = () => {
     const res = await fetch(URL_BASE);
     if (!res.ok) {
         throw new Error('No se pudo obtener la lista de clientes');
@@ -17,7 +17,7 @@ async function obtenerClientes() {
     return res.json();
 }
 
-async function obtenerClientePorId(id) {
+async const obtenerClientePorId = (id) => {
     const res = await fetch(`${URL_BASE}/${id}`);
     if (!res.ok) {
         throw new Error('No se pudo obtener el cliente');
@@ -25,7 +25,7 @@ async function obtenerClientePorId(id) {
     return res.json();
 }
 
-async function crearCliente(cliente) {
+async const crearCliente = (cliente) => {
     const res = await fetch(URL_BASE, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -37,7 +37,7 @@ async function crearCliente(cliente) {
     return res.json();
 }
 
-async function eliminarCliente(id) {
+async const eliminarCliente = (id) => {
     const res = await fetch(`${URL_BASE}/${id}`, {
         method: 'DELETE'
     });

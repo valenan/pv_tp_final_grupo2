@@ -7,7 +7,7 @@ import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
 import Container from "react-bootstrap/Container";
 
-function DetalleClientes() {
+const DetalleClientes = () => {
 
     const { id } = useParams();
     const { admin } = useContext(AdminContext);
