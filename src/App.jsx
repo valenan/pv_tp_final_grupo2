@@ -8,7 +8,7 @@ import Login from './views/Login';
 import ListaClientes from './views/ListaClientes';
 import DetalleClientes from './views/DetalleClientes';
 
-function App() {
+const App = () => {
   return (
     <AdminProvider>
       <div className="d-flex flex-column min-vh-100">
