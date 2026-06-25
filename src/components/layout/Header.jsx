@@ -14,7 +14,7 @@ function Header() {
     };
 
     return (
-        <div className="bg-dark text-white mb-4 p-3">
+        <div className="bg-dark text-white p-3">
             <Container className="d-flex justify-content-between align-items-center">
                 <Link to="/clientes" className="text-white text-decoration-none">
                     Panel de Control de Clientes

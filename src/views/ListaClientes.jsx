@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import clientesService from '../services/clientesService';
 import ClienteCard from '../components/common/ClienteCard';
-import FormularioCliente from '../components/common/FormularioCliente'; 
+import FormularioCliente from '../components/common/FormularioCliente';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
@@ -9,6 +9,7 @@ import Form from 'react-bootstrap/Form';
 import Spinner from 'react-bootstrap/Spinner';
 import Alert from 'react-bootstrap/Alert';
 import '../assets/styles/listaClientes.css'
+import axios from 'axios';
 
 const ListaClientes = () => {
 
@@ -21,7 +22,7 @@ const ListaClientes = () => {
 
         const cargarClientes = async () => {
 
-            try {   
+            try {
                 setCargando(true);
                 setError("");
 
@@ -32,17 +33,15 @@ const ListaClientes = () => {
                     setAllClientes(datosParseados);
                     setClientes(datosParseados);
                 } else {
-                    const response = await fetch('https://fakestoreapi.com/users');
-                    
-                    if (!response.ok) {
-                        throw new Error("Error al obtener los clientes");
-                    }
 
-                    const data = await response.json();
+                    const response = await axios.get('https://fakestoreapi.com/users');
+
+                    const data = response.data;
 
                     setAllClientes(data);
                     setClientes(data);
                     localStorage.setItem('lista_clientes', JSON.stringify(data));
+                    
                 }
 
             } catch (err) {
@@ -63,10 +62,10 @@ const ListaClientes = () => {
     const agregarNuevoClienteALaLista = (nuevoCliente) => {
         setAllClientes(prev => {
             const listaActualizada = [nuevoCliente, ...prev];
-            localStorage.setItem('lista_clientes', JSON.stringify(listaActualizada)); 
+            localStorage.setItem('lista_clientes', JSON.stringify(listaActualizada));
             return listaActualizada;
         });
-        
+
         setClientes(prev => [nuevoCliente, ...prev]);
     };
 
@@ -94,15 +93,15 @@ const ListaClientes = () => {
 
     return (
         <div>
-            <Container className="mt-4"> 
+            <Container className="mt-4">
                 <h1>Página de listado de Clientes</h1>
-                
+
                 <Row className="mb-4">
                     <Col xs={12}>
                         <FormularioCliente onClienteCreado={agregarNuevoClienteALaLista} />
                     </Col>
                 </Row>
-                
+
                 <hr />
 
                 <h3 className="mt-4 mb-3">Buscar y Filtrar</h3>
