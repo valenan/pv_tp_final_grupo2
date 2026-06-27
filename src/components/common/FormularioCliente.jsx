@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Form, Button, Row, Col } from "react-bootstrap";
 
-const FormularioCliente = ({ inicial, onClienteCreado }) => {
+const FormularioCliente = ({ inicial, onSubmit }) => {
     const [cliente, setCliente] = useState({
         email: "",
         username: "",
@@ -31,6 +31,14 @@ const FormularioCliente = ({ inicial, onClienteCreado }) => {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     };
 
+    const soloNumeros = (valor) => {
+        return valor.replace(/[^0-9]/g, "");
+    };
+
+    const soloLetras = (valor) => {
+        return valor.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s]/g, "").replace(/\s{2,}/g, " ");
+    };
+
     const validarFormulario = () => {
         const nuevosErrores = {};
 
@@ -57,12 +65,19 @@ const FormularioCliente = ({ inicial, onClienteCreado }) => {
 
     const manejarCambio = (e) => {
         const { name, value } = e.target;
+        let valorFinal = value;
+
+        if (name === "phone" || name === "address.zipcode" || name === "address.number") {
+            valorFinal = soloNumeros(value);
+        } else if (name === "name.firstname" || name === "name.lastname" || name === "address.city") {
+            valorFinal = soloLetras(value);
+        }
 
         if (name.startsWith("name.")) {
             const campo = name.split(".")[1];
             setCliente((prev) => ({
                 ...prev,
-                name: { ...prev.name, [campo]: value }
+                name: { ...prev.name, [campo]: valorFinal }
             }));
         } else if (name.startsWith("address.")) {
             const campo = name.split(".")[1];
@@ -70,59 +85,27 @@ const FormularioCliente = ({ inicial, onClienteCreado }) => {
                 ...prev,
                 address: { 
                     ...prev.address, 
-                    [campo]: campo === "number" ? (parseInt(value) || "") : value 
+                    [campo]: campo === "number" ? (parseInt(valorFinal) || "") : valorFinal 
                 }
             }));
         } else {
             setCliente((prev) => ({
                 ...prev,
-                [name]: value
+                [name]: valorFinal
             }));
         }
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        
-        if (!validarFormulario()) return;
-
-        try {
-            const response = await fetch('https://fakestoreapi.com/users', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(cliente)
-            });
-
-            if (!response.ok) throw new Error('Error al registrar el cliente en el servidor');
-
-            const data = await response.json();
-
-            const clienteCompleto = {
-                ...cliente,
-                id: data.id
-            };
-
-            if (onClienteCreado) {
-                onClienteCreado(clienteCompleto);
-            }
-
-            setCliente({
-                email: "", username: "", password: "",
-                name: { firstname: "", lastname: "" },
-                address: { city: "", street: "", number: "", zipcode: "" },
-                phone: ""
-            });
-            setErrores({});
-            alert(`¡Cliente creado con éxito! ID asignado: ${data.id}`);
-
-        } catch (error) {
-            alert(`Hubo un error: ${error.message}`);
+        if (validarFormulario()) {
+            onSubmit(cliente);
         }
     };
 
     return (
         <div className="p-4 mb-4 border rounded bg-light">
-            <h4 className="mb-3">Alta de Nuevo Cliente (Estructura Unificada)</h4>
+            <h4 className="mb-3">Alta de Nuevo Cliente </h4>
             <Form onSubmit={handleSubmit}>
                 
                 <Row>
@@ -176,7 +159,7 @@ const FormularioCliente = ({ inicial, onClienteCreado }) => {
                                 name="phone"
                                 value={cliente.phone}
                                 onChange={manejarCambio}
-                                placeholder="388-1234567"
+                                placeholder="3881234567"
                                 isInvalid={!!errores.phone}
                             />
                             <Form.Control.Feedback type="invalid">{errores.phone}</Form.Control.Feedback>
@@ -229,7 +212,6 @@ const FormularioCliente = ({ inicial, onClienteCreado }) => {
                             <Form.Label>Número</Form.Label>
                             <Form.Control
                                 name="address.number"
-                                type="number"
                                 value={cliente.address.number}
                                 onChange={manejarCambio}
                                 placeholder="840"
@@ -263,7 +245,7 @@ const FormularioCliente = ({ inicial, onClienteCreado }) => {
                         placeholder="••••••••"
                         isInvalid={!!errores.password}
                     />
-                    <Form.Group><Form.Control.Feedback type="invalid">{errores.password}</Form.Control.Feedback></Form.Group>
+                    <Form.Control.Feedback type="invalid">{errores.password}</Form.Control.Feedback>
                 </Form.Group>
 
                 <Button variant="primary" type="submit" className="w-100 mt-2">
