@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Form, Button, Row, Col } from "react-bootstrap";
+import { Form, Button, Row, Col, InputGroup } from "react-bootstrap";
 
 const FormularioCliente = ({ inicial, onSubmit }) => {
     const [cliente, setCliente] = useState({
@@ -56,7 +56,7 @@ const FormularioCliente = ({ inicial, onSubmit }) => {
 
         if (!cliente.address.city.trim()) nuevosErrores.city = "La ciudad es requerida.";
         if (!cliente.address.street.trim()) nuevosErrores.street = "La calle es requerida.";
-        if (!cliente.address.number) nuevosErrores.number = "El número es requerido.";
+        if (!cliente.address.number.trim()) nuevosErrores.number = "El número es requerido.";
         if (!cliente.address.zipcode.trim()) nuevosErrores.zipcode = "El código postal es requerido.";
 
         setErrores(nuevosErrores);
@@ -83,10 +83,7 @@ const FormularioCliente = ({ inicial, onSubmit }) => {
             const campo = name.split(".")[1];
             setCliente((prev) => ({
                 ...prev,
-                address: { 
-                    ...prev.address, 
-                    [campo]: campo === "number" ? (parseInt(valorFinal) || "") : valorFinal 
-                }
+                address: { ...prev.address, [campo]: valorFinal }
             }));
         } else {
             setCliente((prev) => ({
@@ -104,155 +101,195 @@ const FormularioCliente = ({ inicial, onSubmit }) => {
     };
 
     return (
-        <div className="p-4 mb-4 border rounded bg-light">
-            <h4 className="mb-3">Alta de Nuevo Cliente </h4>
-            <Form onSubmit={handleSubmit}>
-                
-                <Row>
-                    <Col md={6}>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Nombre</Form.Label>
-                            <Form.Control
-                                name="name.firstname"
-                                value={cliente.name.firstname}
-                                onChange={manejarCambio}
-                                placeholder="Juan"
-                                isInvalid={!!errores.firstname}
-                            />
-                            <Form.Control.Feedback type="invalid">{errores.firstname}</Form.Control.Feedback>
-                        </Form.Group>
-                    </Col>
-                    <Col md={6}>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Apellido</Form.Label>
-                            <Form.Control
-                                name="name.lastname"
-                                value={cliente.name.lastname}
-                                onChange={manejarCambio}
-                                placeholder="Pérez"
-                                isInvalid={!!errores.lastname}
-                            />
-                            <Form.Control.Feedback type="invalid">{errores.lastname}</Form.Control.Feedback>
-                        </Form.Group>
-                    </Col>
-                </Row>
+        <Form onSubmit={handleSubmit} noValidate>
+            <Row>
+                <Col md={6}>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Nombre</Form.Label>
+                        <Form.Control
+                            name="name.firstname"
+                            value={cliente.name.firstname}
+                            onChange={manejarCambio}
+                            placeholder="Juan"
+                            isInvalid={!!errores.firstname}
+                        />
+                        {errores.firstname && (
+                            <Form.Control.Feedback type="invalid" className="d-block">
+                                {errores.firstname}
+                            </Form.Control.Feedback>
+                        )}
+                    </Form.Group>
+                </Col>
+                <Col md={6}>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Apellido</Form.Label>
+                        <Form.Control
+                            name="name.lastname"
+                            value={cliente.name.lastname}
+                            onChange={manejarCambio}
+                            placeholder="Pérez"
+                            isInvalid={!!errores.lastname}
+                        />
+                        {errores.lastname && (
+                            <Form.Control.Feedback type="invalid" className="d-block">
+                                {errores.lastname}
+                            </Form.Control.Feedback>
+                        )}
+                    </Form.Group>
+                </Col>
+            </Row>
 
-                <Row>
-                    <Col md={4}>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Email</Form.Label>
+            <Row>
+                <Col md={4}>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Email</Form.Label>
+                        <Form.Control
+                            name="email"
+                            type="email"
+                            value={cliente.email}
+                            onChange={manejarCambio}
+                            placeholder="juan@ejemplo.com"
+                            isInvalid={!!errores.email}
+                        />
+                        {errores.email && (
+                            <Form.Control.Feedback type="invalid" className="d-block">
+                                {errores.email}
+                            </Form.Control.Feedback>
+                        )}
+                    </Form.Group>
+                </Col>
+                <Col md={4}>
+                    <Form.Group controlId="formTelefono" className="mb-3">
+                        <Form.Label>Teléfono</Form.Label>
+                        <InputGroup hasValidation>
+                            <InputGroup.Text className="bg-light border-end-0 text-muted fw-medium">+</InputGroup.Text>
                             <Form.Control
-                                name="email"
-                                type="email"
-                                value={cliente.email}
-                                onChange={manejarCambio}
-                                placeholder="juan@ejemplo.com"
-                                isInvalid={!!errores.email}
-                            />
-                            <Form.Control.Feedback type="invalid">{errores.email}</Form.Control.Feedback>
-                        </Form.Group>
-                    </Col>
-                    <Col md={4}>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Teléfono</Form.Label>
-                            <Form.Control
+                                className="border-start-0 ps-1"
                                 name="phone"
                                 value={cliente.phone}
                                 onChange={manejarCambio}
                                 placeholder="3881234567"
                                 isInvalid={!!errores.phone}
                             />
-                            <Form.Control.Feedback type="invalid">{errores.phone}</Form.Control.Feedback>
-                        </Form.Group>
-                    </Col>
-                    <Col md={4}>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Username</Form.Label>
-                            <Form.Control
-                                name="username"
-                                value={cliente.username}
-                                onChange={manejarCambio}
-                                placeholder="juan.perez"
-                                isInvalid={!!errores.username}
-                            />
-                            <Form.Control.Feedback type="invalid">{errores.username}</Form.Control.Feedback>
-                        </Form.Group>
-                    </Col>
-                </Row>
+                        </InputGroup>
+                        {errores.phone && (
+                            <Form.Control.Feedback type="invalid" className="d-block">
+                                {errores.phone}
+                            </Form.Control.Feedback>
+                        )}
+                    </Form.Group>
+                </Col>
+                <Col md={4}>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Username</Form.Label>
+                        <Form.Control
+                            name="username"
+                            value={cliente.username}
+                            onChange={manejarCambio}
+                            placeholder="juan.perez"
+                            isInvalid={!!errores.username}
+                        />
+                        {errores.username && (
+                            <Form.Control.Feedback type="invalid" className="d-block">
+                                {errores.username}
+                            </Form.Control.Feedback>
+                        )}
+                    </Form.Group>
+                </Col>
+            </Row>
 
-                <Row>
-                    <Col md={3}>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Ciudad</Form.Label>
-                            <Form.Control
-                                name="address.city"
-                                value={cliente.address.city}
-                                onChange={manejarCambio}
-                                placeholder="San Salvador de Jujuy"
-                                isInvalid={!!errores.city}
-                            />
-                            <Form.Control.Feedback type="invalid">{errores.city}</Form.Control.Feedback>
-                        </Form.Group>
-                    </Col>
-                    <Col md={4}>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Calle</Form.Label>
-                            <Form.Control
-                                name="address.street"
-                                value={cliente.address.street}
-                                onChange={manejarCambio}
-                                placeholder="Av. Fascio"
-                                isInvalid={!!errores.street}
-                            />
-                            <Form.Control.Feedback type="invalid">{errores.street}</Form.Control.Feedback>
-                        </Form.Group>
-                    </Col>
-                    <Col md={2}>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Número</Form.Label>
-                            <Form.Control
-                                name="address.number"
-                                value={cliente.address.number}
-                                onChange={manejarCambio}
-                                placeholder="840"
-                                isInvalid={!!errores.number}
-                            />
-                            <Form.Control.Feedback type="invalid">{errores.number}</Form.Control.Feedback>
-                        </Form.Group>
-                    </Col>
-                    <Col md={3}>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Código Postal</Form.Label>
-                            <Form.Control
-                                name="address.zipcode"
-                                value={cliente.address.zipcode}
-                                onChange={manejarCambio}
-                                placeholder="4600"
-                                isInvalid={!!errores.zipcode}
-                            />
-                            <Form.Control.Feedback type="invalid">{errores.zipcode}</Form.Control.Feedback>
-                        </Form.Group>
-                    </Col>
-                </Row>
+            <Row>
+                <Col md={3}>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Ciudad</Form.Label>
+                        <Form.Control
+                            name="address.city"
+                            value={cliente.address.city}
+                            onChange={manejarCambio}
+                            placeholder="San Salvador de Jujuy"
+                            isInvalid={!!errores.city}
+                        />
+                        {errores.city && (
+                            <Form.Control.Feedback type="invalid" className="d-block">
+                                {errores.city}
+                            </Form.Control.Feedback>
+                        )}
+                    </Form.Group>
+                </Col>
+                <Col md={4}>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Calle</Form.Label>
+                        <Form.Control
+                            name="address.street"
+                            value={cliente.address.street}
+                            onChange={manejarCambio}
+                            placeholder="Av. Fascio"
+                            isInvalid={!!errores.street}
+                        />
+                        {errores.street && (
+                            <Form.Control.Feedback type="invalid" className="d-block">
+                                {errores.street}
+                            </Form.Control.Feedback>
+                        )}
+                    </Form.Group>
+                </Col>
+                <Col md={2}>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Número</Form.Label>
+                        <Form.Control
+                            name="address.number"
+                            value={cliente.address.number}
+                            onChange={manejarCambio}
+                            placeholder="840"
+                            isInvalid={!!errores.number}
+                        />
+                        {errores.number && (
+                            <Form.Control.Feedback type="invalid" className="d-block">
+                                {errores.number}
+                            </Form.Control.Feedback>
+                        )}
+                    </Form.Group>
+                </Col>
+                <Col md={3}>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Código Postal</Form.Label>
+                        <Form.Control
+                            name="address.zipcode"
+                            value={cliente.address.zipcode}
+                            onChange={manejarCambio}
+                            placeholder="4600"
+                            isInvalid={!!errores.zipcode}
+                        />
+                        {errores.zipcode && (
+                            <Form.Control.Feedback type="invalid" className="d-block">
+                                {errores.zipcode}
+                            </Form.Control.Feedback>
+                        )}
+                    </Form.Group>
+                </Col>
+            </Row>
 
-                <Form.Group className="mb-3">
-                    <Form.Label>Contraseña de acceso</Form.Label>
-                    <Form.Control
-                        name="password"
-                        type="password"
-                        value={cliente.password}
-                        onChange={manejarCambio}
-                        placeholder="••••••••"
-                        isInvalid={!!errores.password}
-                    />
-                    <Form.Control.Feedback type="invalid">{errores.password}</Form.Control.Feedback>
-                </Form.Group>
+            <Form.Group className="mb-3">
+                <Form.Label>Contraseña de acceso</Form.Label>
+                <Form.Control
+                    name="password"
+                    type="password"
+                    value={cliente.password}
+                    onChange={manejarCambio}
+                    placeholder="••••••••"
+                    isInvalid={!!errores.password}
+                />
+                {errores.password && (
+                    <Form.Control.Feedback type="invalid" className="d-block">
+                        {errores.password}
+                    </Form.Control.Feedback>
+                )}
+            </Form.Group>
 
-                <Button variant="primary" type="submit" className="w-100 mt-2">
-                    Guardar Cliente
-                </Button>
-            </Form>
-        </div>
+            <Button variant="primary" type="submit" className="w-100 mt-2">
+                Guardar Cliente
+            </Button>
+        </Form>
     );
 };
 
