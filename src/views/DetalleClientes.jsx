@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { AdminContext } from "../context/AdminContext";
+import clientesService from "../services/clientesService";
 
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
@@ -14,59 +15,91 @@ const DetalleClientes = () => {
     const [cliente, setCliente] = useState(null);
     const [error, setError] = useState("");
 
-    useEffect(() => {
-        const obtenerDetalle = async () => {
-            try {
-                setError("");
-                
-                const clientesLocales = localStorage.getItem('lista_clientes');
-                let clienteEncontrado = null;
+useEffect(() => {
 
-                if (clientesLocales) {
-                    const lista = JSON.parse(clientesLocales);
-                    clienteEncontrado = lista.find(c => c.id === parseInt(id));
-                }
+    const obtenerDetalle = async () => {
 
-                if (clienteEncontrado) {
-                    setCliente(clienteEncontrado);
-                } else {
-                    const response = await fetch(`https://fakestoreapi.com/users/${id}`);
-                    if (!response.ok) {
-                        throw new Error("No se pudo obtener la información del servidor remoto.");
-                    }
-                    const data = await response.json();
-                    setCliente(data);
-                }
-            } catch (err) {
-                console.error(err);
-                setError(err.message);
+        try {
+
+            setError("");
+
+            const clientesLocales =
+                localStorage.getItem('lista_clientes');
+
+            let clienteEncontrado = null;
+
+            if (clientesLocales) {
+
+                const lista = JSON.parse(clientesLocales);
+
+                clienteEncontrado =
+                    lista.find(
+                        c => c.id === parseInt(id)
+                    );
+
             }
-        };
 
-        obtenerDetalle();
-    }, [id]);
+            if (clienteEncontrado) {
+
+                setCliente(clienteEncontrado);
+
+            } else {
+
+                const data =
+                    await clientesService.obtenerClientePorId(id);
+
+                setCliente(data);
+
+            }
+
+        } catch (err) {
+
+            console.error(err);
+
+            setError(err.message);
+
+        }
+
+    };
+
+    obtenerDetalle();
+
+}, [id]);
 
     const eliminarCliente = async () => {
-        try {
-            await fetch(
-                `https://fakestoreapi.com/users/${id}`,
-                {
-                    method: "DELETE"
-                }
+
+    try {
+
+        await clientesService.eliminarCliente(id);
+
+        const clientesLocales =
+            localStorage.getItem('lista_clientes');
+
+        if (clientesLocales) {
+
+            const lista = JSON.parse(clientesLocales);
+
+            const listaFiltrada =
+                lista.filter(
+                    c => c.id !== parseInt(id)
+                );
+
+            localStorage.setItem(
+                'lista_clientes',
+                JSON.stringify(listaFiltrada)
             );
 
-            const clientesLocales = localStorage.getItem('lista_clientes');
-            if (clientesLocales) {
-                const lista = JSON.parse(clientesLocales);
-                const listaFiltrada = lista.filter(c => c.id !== parseInt(id));
-                localStorage.setItem('lista_clientes', JSON.stringify(listaFiltrada));
-            }
-
-            alert("Cliente eliminado de forma simulada");
-        } catch (error) {
-            console.error(error);
         }
-    };
+
+        alert("Cliente eliminado de forma simulada");
+
+    } catch (error) {
+
+        console.error(error);
+
+    }
+
+};
 
     if (error) {
         return (
