@@ -1,9 +1,8 @@
-import { useContext } from "react";
-import { Navigate } from "react-router-dom";
-import { AdminContext } from "../../context/AdminContext";
+import { Navigate } from 'react-router-dom';
+import useAuth from '../../hooks/useAuth';
 
 const RutaProtegida = ({ children }) => {
-  const { admin } = useContext(AdminContext);
+  const { admin } = useAuth();
 
   if (!admin) {
     return <Navigate to="/login" replace />;

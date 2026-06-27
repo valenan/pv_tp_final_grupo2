@@ -2,34 +2,49 @@ import { createContext, useState, useEffect } from 'react';
 
 export const AdminContext = createContext();
 
-function AdminProvider({ children }) {
+const AdminProvider = ({ children }) => {
 
-    const [admin, setAdmin] = useState(() => {
-        const guardado = localStorage.getItem('admin');
-        return guardado ? JSON.parse(guardado) : null;
-    });
+  const [admin, setAdmin] = useState(() => {
+    const guardado = localStorage.getItem('admin');
 
-    useEffect(() => {
-        if (admin) {
-            localStorage.setItem('admin', JSON.stringify(admin));
-        } else {
-            localStorage.removeItem('admin');
-        }
-    }, [admin]);
+    if (!guardado) return null;
 
-    function login(datosAdmin) {
-        setAdmin(datosAdmin);
+    try {
+      const adminParseado = JSON.parse(guardado);
+
+      if (!adminParseado.usuario || !adminParseado.password) {
+        localStorage.removeItem('admin');
+        return null;
+      }
+
+      return adminParseado;
+    } catch {
+      localStorage.removeItem('admin');
+      return null;
     }
+  });
 
-    function logout() {
-        setAdmin(null);
+  useEffect(() => {
+    if (admin) {
+      localStorage.setItem('admin', JSON.stringify(admin));
+    } else {
+      localStorage.removeItem('admin');
     }
+  }, [admin]);
 
-    return (
-        <AdminContext.Provider value={{ admin, login, logout }}>
-            {children}
-        </AdminContext.Provider>
-    );
-}
-//Agrego mi nombre al componente
+  const login = (datosAdmin) => {
+    setAdmin(datosAdmin);
+  };
+
+  const logout = () => {
+    setAdmin(null);
+  };
+
+  return (
+    <AdminContext.Provider value={{ admin, login, logout }}>
+      {children}
+    </AdminContext.Provider>
+  );
+};
+
 export { AdminProvider };
