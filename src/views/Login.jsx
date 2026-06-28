@@ -2,13 +2,9 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Card, Form, Button, InputGroup } from 'react-bootstrap';
 import useAuth from '../hooks/useAuth';
-import adminService from '../services/adminService';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Dashboard from '../components/common/Dashboard';
+import adminService from '../services/adminservice';
 
 const Login = () => {
-
     const { login } = useAuth();
     const navigate = useNavigate();
 
@@ -18,74 +14,56 @@ const Login = () => {
     const [errores, setErrores] = useState({});
 
     const handleSubmit = async (e) => {
-
         e.preventDefault();
+
         const nuevosErrores = {};
+
         if (usuario.trim() === '') {
-            nuevosErrores.usuario =
-                'Debe completar el usuario.';
+            nuevosErrores.usuario = 'Debe completar el usuario.';
         }
         if (password.trim() === '') {
-            nuevosErrores.password =
-                'Debe completar la contraseña.';
+            nuevosErrores.password = 'Debe completar la contraseña.';
         }
         if (Object.keys(nuevosErrores).length > 0) {
             setErrores(nuevosErrores);
             return;
         }
+
         try {
-            const adminEncontrado =
-                await adminService.loginAdmin(
-                    usuario,
-                    password
-                );
+            const adminEncontrado = await adminService.loginAdmin(usuario, password);
+
             if (!adminEncontrado) {
-                setErrores({
-                    general:
-                        'Usuario o contraseña incorrectos'
-                });
+                setErrores({ general: 'Usuario o contraseña incorrectos' });
                 return;
             }
+
             login(adminEncontrado);
             navigate('/clientes');
         } catch (error) {
             console.error(error);
-            setErrores({
-                general:
-                    'Error al iniciar sesión'
-            });
+            setErrores({ general: 'Error al iniciar sesión' });
         }
     };
+
     return (
         <Container className="d-flex justify-content-center align-items-center min-vh-100">
-            <Row>
-                <Col>
             <Card style={{ width: '26rem' }}>
                 <Card.Body>
-                    <Card.Title>
-                        Ingreso del Administrador
-                    </Card.Title>
-                    {
-                        errores.general &&
-                        <p style={{ color: 'red' }}>
-                            {errores.general}
-                        </p>
-                    }
+                    <Card.Title>Ingreso del Administrador</Card.Title>
+
+                    {errores.general && (
+                        <p style={{ color: 'red' }}>{errores.general}</p>
+                    )}
+
                     <Form onSubmit={handleSubmit}>
                         <Form.Group className="mb-3">
-                            <Form.Label>
-                                Usuario
-                            </Form.Label>
+                            <Form.Label>Usuario</Form.Label>
                             <Form.Control
                                 type="text"
                                 value={usuario}
                                 onChange={(e) => {
                                     setUsuario(e.target.value);
-                                    setErrores(prev => ({
-                                        ...prev,
-                                        usuario: undefined,
-                                        general: undefined
-                                    }));
+                                    setErrores(prev => ({ ...prev, usuario: undefined, general: undefined }));
                                 }}
                                 placeholder="Ej: johnd"
                                 isInvalid={!!errores.usuario}
@@ -94,25 +72,16 @@ const Login = () => {
                                 {errores.usuario}
                             </Form.Control.Feedback>
                         </Form.Group>
+
                         <Form.Group className="mb-3">
-                            <Form.Label>
-                                Contraseña
-                            </Form.Label>
+                            <Form.Label>Contraseña</Form.Label>
                             <InputGroup>
                                 <Form.Control
-                                    type={
-                                        mostrarPassword
-                                            ? 'text'
-                                            : 'password'
-                                    }
+                                    type={mostrarPassword ? 'text' : 'password'}
                                     value={password}
                                     onChange={(e) => {
                                         setPassword(e.target.value);
-                                        setErrores(prev => ({
-                                            ...prev,
-                                            password: undefined,
-                                            general: undefined
-                                        }));
+                                        setErrores(prev => ({ ...prev, password: undefined, general: undefined }));
                                     }}
                                     placeholder="Ingrese su contraseña"
                                     isInvalid={!!errores.password}
@@ -120,17 +89,9 @@ const Login = () => {
                                 <InputGroup.Text
                                     as="button"
                                     type="button"
-                                    onClick={() =>
-                                        setMostrarPassword(
-                                            prev => !prev
-                                        )
-                                    }
+                                    onClick={() => setMostrarPassword(prev => !prev)}
                                     tabIndex={-1}
-                                    style={{
-                                        cursor: 'pointer',
-                                        borderColor: '#ced4da',
-                                        backgroundColor: '#f8f9fa'
-                                    }}
+                                    style={{ cursor: 'pointer', borderColor: '#ced4da', backgroundColor: '#f8f9fa' }}
                                 >
                                     {mostrarPassword ? '🙈' : '👁️'}
                                 </InputGroup.Text>
@@ -139,21 +100,13 @@ const Login = () => {
                                 </Form.Control.Feedback>
                             </InputGroup>
                         </Form.Group>
-                        <Button
-                            type="submit"
-                            variant="primary"
-                            className="w-100"
-                        >
+
+                        <Button type="submit" variant="primary" className="w-100">
                             Ingresar
                         </Button>
                     </Form>
                 </Card.Body>
             </Card>
-            </Col>
-            <Col>
-            <Dashboard/>
-            </Col>
-            </Row>
         </Container>
     );
 };
