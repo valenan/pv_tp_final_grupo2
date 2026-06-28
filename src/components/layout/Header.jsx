@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Container, Button } from 'react-bootstrap';
 import { AdminContext } from '../../context/AdminContext';
 
-function Header() {
+const Header = () => {
 
     const { admin, logout } = useContext(AdminContext);
     const navigate = useNavigate();

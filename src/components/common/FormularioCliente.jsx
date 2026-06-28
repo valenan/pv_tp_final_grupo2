@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Form, Button, Row, Col, InputGroup } from "react-bootstrap";
+import { Form, Button, Row, Col, InputGroup, Alert } from "react-bootstrap";
 
 const FormularioCliente = ({ inicial, onSubmit }) => {
     const [cliente, setCliente] = useState({
@@ -20,6 +20,7 @@ const FormularioCliente = ({ inicial, onSubmit }) => {
     });
 
     const [errores, setErrores] = useState({});
+    const [alerta, setAlerta] = useState(null);
 
     useEffect(() => {
         if (inicial) {
@@ -66,7 +67,10 @@ const FormularioCliente = ({ inicial, onSubmit }) => {
     const manejarCambio = (e) => {
         const { name, value } = e.target;
         let valorFinal = value;
-       
+
+        if (alerta) {
+            setAlerta(null);
+        }
 
         if (name === "phone" || name === "address.zipcode" || name === "address.number") {
             valorFinal = soloNumeros(value);
@@ -101,17 +105,20 @@ const FormularioCliente = ({ inicial, onSubmit }) => {
         e.preventDefault();
         if (validarFormulario()) {
             onSubmit(cliente);
-            alert(
-                "✅ Cliente agregado correctamente\n\n" +
-                "Nombre: " + cliente.name.firstname + " " + cliente.name.lastname + "\n" +
-                "Usuario: " + cliente.username + "\n" +
-                "Email: " + cliente.email
-);  
+            setAlerta({
+                variant: "success",
+                mensaje: `Cliente agregado correctamente. ${cliente.name.firstname} ${cliente.name.lastname} fue registrado con éxito.`
+            });
         }
     };
 
     return (
         <Form onSubmit={handleSubmit} noValidate>
+            {alerta && (
+                <Alert variant={alerta.variant} dismissible className="mb-3" onClose={() => setAlerta(null)}>
+                    {alerta.mensaje}
+                </Alert>
+            )}
             <Row>
                 <Col md={6}>
                     <Form.Group className="mb-3">
