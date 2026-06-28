@@ -27,9 +27,10 @@ const Dashboard = () => {
         cargar();
     }, []);
 
-    const ciudades = clientes.reduce((acc, cliente) => {
-        const ciudad = cliente.address.city.toLowerCase();
-        acc[ciudad] = (acc[ciudad] || 0) + 1;
+    const ciudades = (Array.isArray(clientes) ? clientes : []).reduce((acc, cliente) => {
+        const ciudad = cliente?.address?.city?.trim() || 'Sin ciudad';
+        const clave = ciudad.toLowerCase();
+        acc[clave] = (acc[clave] || 0) + 1;
         return acc;
     }, {});
 
