@@ -23,7 +23,7 @@ function Header() {
                 {admin && (
                     <div>
                         <span className="me-3">
-                {admin.username} - {admin.email}
+                {admin.nombre} - {admin.sector}
 </span>
                         <Button variant="outline-light" size="sm" onClick={handleLogout}>
                             Cerrar Sesión

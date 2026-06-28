@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { Container, Card, Form, Button, InputGroup } from 'react-bootstrap';
 import useAuth from '../hooks/useAuth';
 import adminService from '../services/adminService';
-import clientesService from '../services/clientesService';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Dashboard from '../components/common/Dashboard';
