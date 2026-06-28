@@ -66,12 +66,16 @@ const FormularioCliente = ({ inicial, onSubmit }) => {
     const manejarCambio = (e) => {
         const { name, value } = e.target;
         let valorFinal = value;
+       
 
         if (name === "phone" || name === "address.zipcode" || name === "address.number") {
             valorFinal = soloNumeros(value);
         } else if (name === "name.firstname" || name === "name.lastname" || name === "address.city") {
             valorFinal = soloLetras(value);
         }
+        if (name === "email" || name === "username" || name === "password") {
+        valorFinal = valorFinal.replace(/\s/g, "");
+}
 
         if (name.startsWith("name.")) {
             const campo = name.split(".")[1];
