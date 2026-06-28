@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Card, Form, Button, InputGroup } from 'react-bootstrap';
 import useAuth from '../hooks/useAuth';
-import clientesService from '../services/clientesService';
+import adminService from '../services/adminService';
 
 const Login = () => {
 
@@ -32,7 +32,7 @@ const Login = () => {
         }
         try {
             const adminEncontrado =
-                await clientesService.loginAdmin(
+                await adminService.loginAdmin(
                     usuario,
                     password
                 );

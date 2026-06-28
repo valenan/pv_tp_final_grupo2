@@ -12,7 +12,7 @@ const AdminProvider = ({ children }) => {
     try {
       const adminParseado = JSON.parse(guardado);
 
-      if (!adminParseado.usuario || !adminParseado.password) {
+      if (!adminParseado.user || !adminParseado.password) {
         localStorage.removeItem('admin');
         return null;
       }
