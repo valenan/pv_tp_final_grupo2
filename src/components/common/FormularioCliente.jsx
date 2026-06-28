@@ -28,7 +28,7 @@ const FormularioCliente = ({ inicial, onSubmit }) => {
     }, [inicial]);
 
     const validarEmail = (email) => {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        return /^[^\s@]+@gmail\.com$/i.test(email);
     };
 
     const soloNumeros = (valor) => {
@@ -66,12 +66,16 @@ const FormularioCliente = ({ inicial, onSubmit }) => {
     const manejarCambio = (e) => {
         const { name, value } = e.target;
         let valorFinal = value;
+       
 
         if (name === "phone" || name === "address.zipcode" || name === "address.number") {
             valorFinal = soloNumeros(value);
         } else if (name === "name.firstname" || name === "name.lastname" || name === "address.city") {
             valorFinal = soloLetras(value);
         }
+        if (name === "email" || name === "username" || name === "password") {
+        valorFinal = valorFinal.replace(/\s/g, "");
+}
 
         if (name.startsWith("name.")) {
             const campo = name.split(".")[1];
@@ -97,6 +101,12 @@ const FormularioCliente = ({ inicial, onSubmit }) => {
         e.preventDefault();
         if (validarFormulario()) {
             onSubmit(cliente);
+            alert(
+                "✅ Cliente agregado correctamente\n\n" +
+                "Nombre: " + cliente.name.firstname + " " + cliente.name.lastname + "\n" +
+                "Usuario: " + cliente.username + "\n" +
+                "Email: " + cliente.email
+);  
         }
     };
 
