@@ -3,6 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { Container, Card, Form, Button, InputGroup } from 'react-bootstrap';
 import useAuth from '../hooks/useAuth';
 import adminService from '../services/adminService';
+import clientesService from '../services/clientesService';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Dashboard from '../components/common/Dashboard';
 
 const Login = () => {
 
@@ -55,6 +59,8 @@ const Login = () => {
     };
     return (
         <Container className="d-flex justify-content-center align-items-center min-vh-100">
+            <Row>
+                <Col>
             <Card style={{ width: '26rem' }}>
                 <Card.Body>
                     <Card.Title>
@@ -144,6 +150,11 @@ const Login = () => {
                     </Form>
                 </Card.Body>
             </Card>
+            </Col>
+            <Col>
+            <Dashboard/>
+            </Col>
+            </Row>
         </Container>
     );
 };

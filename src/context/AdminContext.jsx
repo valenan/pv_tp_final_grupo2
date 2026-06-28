@@ -4,47 +4,78 @@ export const AdminContext = createContext();
 
 const AdminProvider = ({ children }) => {
 
-  const [admin, setAdmin] = useState(() => {
-    const guardado = localStorage.getItem('admin');
+    const [admin, setAdmin] = useState(() => {
 
-    if (!guardado) return null;
+        const guardado =
+            localStorage.getItem('admin');
 
-    try {
-      const adminParseado = JSON.parse(guardado);
+        if (!guardado) {
+            return null;
+        }
 
       if (!adminParseado.user || !adminParseado.password) {
         localStorage.removeItem('admin');
         return null;
       }
+        try {
 
-      return adminParseado;
-    } catch {
-      localStorage.removeItem('admin');
-      return null;
-    }
-  });
+            return JSON.parse(guardado);
 
-  useEffect(() => {
-    if (admin) {
-      localStorage.setItem('admin', JSON.stringify(admin));
-    } else {
-      localStorage.removeItem('admin');
-    }
-  }, [admin]);
+        } catch {
 
-  const login = (datosAdmin) => {
-    setAdmin(datosAdmin);
-  };
+            localStorage.removeItem('admin');
 
-  const logout = () => {
-    setAdmin(null);
-  };
+            return null;
 
-  return (
-    <AdminContext.Provider value={{ admin, login, logout }}>
-      {children}
-    </AdminContext.Provider>
-  );
+        }
+
+    });
+
+    useEffect(() => {
+
+        if (admin) {
+
+            localStorage.setItem(
+                'admin',
+                JSON.stringify(admin)
+            );
+
+        } else {
+
+            localStorage.removeItem('admin');
+
+        }
+
+    }, [admin]);
+
+    const login = (datosAdmin) => {
+
+        setAdmin(datosAdmin);
+
+    };
+
+    const logout = () => {
+
+        setAdmin(null);
+
+    };
+
+    return (
+
+        <AdminContext.Provider
+            value={{
+                admin,
+                login,
+                logout
+            }}
+        >
+
+            {children}
+
+        </AdminContext.Provider>
+
+    );
+
 };
 
 export { AdminProvider };
