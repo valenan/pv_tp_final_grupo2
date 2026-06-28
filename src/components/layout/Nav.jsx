@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Container, Nav } from 'react-bootstrap';
 import useAuth from '../../hooks/useAuth';
 
-function NavApp() {
+const NavApp = () => {
     const location = useLocation();
     const { admin } = useAuth();
 

@@ -12,21 +12,29 @@ const Dashboard = () => {
     const gerencia = admins.filter(a => a.sector === 'Gerencia').length;
     const soporte = admins.filter(a => a.sector === 'Soporte').length;
 
-    useEffect(() => {
-        const cargar = async () => {
-            try {
-                setCargando(true);
+   useEffect(() => {
+    const cargar = async () => {
+        try {
+            setCargando(true);
+
+            const clientesLocales = localStorage.getItem('lista_clientes');
+
+            if (clientesLocales) {
+                setClientes(JSON.parse(clientesLocales));
+            } else {
                 const data = await clientesService.obtenerClientes();
                 setClientes(data);
-            } catch (err) {
-                setError(err.message || 'No se pudieron cargar los datos.');
-            } finally {
-                setCargando(false);
+                localStorage.setItem('lista_clientes', JSON.stringify(data));
             }
-        };
-        cargar();
-    }, []);
+        } catch (err) {
+            setError(err.message || 'No se pudieron cargar los datos.');
+        } finally {
+            setCargando(false);
+        }
+    };
 
+    cargar();
+}, []);
     const ciudades = (Array.isArray(clientes) ? clientes : []).reduce((acc, cliente) => {
         const ciudad = cliente?.address?.city?.trim() || 'Sin ciudad';
         const clave = ciudad.toLowerCase();

@@ -1,6 +1,6 @@
 import { Container, Row, Col } from 'react-bootstrap';
 
-function Footer() {
+const Footer = () => {
     return (
         <footer className="bg-dark text-white mt-auto py-3 border-top border-secondary">
             <Container>
