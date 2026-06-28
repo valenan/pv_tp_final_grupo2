@@ -9,15 +9,15 @@ import RutaProtegida from '../components/common/RutaProtegida';
 export const AppRouter = createBrowserRouter([
   {
     path: '/',
-    element: <Navigate to="/login" replace />,
+    element: <Navigate to="/dashboard" replace />,
+  },
+  {
+    path: '/dashboard',
+    element: <App page={<Dashboard />} />,
   },
   {
     path: '/login',
     element: <App page={<Login />} />,
-  },
-  {
-    path: '/dashboard',
-    element: <App page={<RutaProtegida><Dashboard /></RutaProtegida>} />,
   },
   {
     path: '/clientes',
@@ -29,6 +29,6 @@ export const AppRouter = createBrowserRouter([
   },
   {
     path: '*',
-    element: <Navigate to="/login" replace />,
+    element: <Navigate to="/dashboard" replace />,
   },
 ]);

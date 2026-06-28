@@ -1,13 +1,14 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import { BrowserRouter } from 'react-router-dom'
-import 'bootstrap/dist/css/bootstrap.min.css' // se implemento para que el sistema grid funcione corectamente
-import App from './App.jsx'
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { RouterProvider } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { AdminProvider } from './context/AdminContext';
+import { AppRouter } from './routes/AppRouter';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <AdminProvider>
+      <RouterProvider router={AppRouter} />
+    </AdminProvider>
   </StrictMode>,
-)
+);
