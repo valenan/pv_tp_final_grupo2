@@ -5,27 +5,26 @@ export const AdminContext = createContext();
 const AdminProvider = ({ children }) => {
 
     const [admin, setAdmin] = useState(() => {
+    const guardado = localStorage.getItem('admin');
 
-        const guardado =
-            localStorage.getItem('admin');
+    if (!guardado) {
+        return null;
+    }
 
-        if (!guardado) {
-            return null;
-        }
+    try {
+        const adminParseado = JSON.parse(guardado);
 
-        try {
-
-            return JSON.parse(guardado);
-
-        } catch {
-
+        if (!adminParseado.user || !adminParseado.password) {
             localStorage.removeItem('admin');
-
             return null;
-
         }
 
-    });
+        return adminParseado;
+    } catch {
+        localStorage.removeItem('admin');
+        return null;
+    }
+});
 
     useEffect(() => {
 
