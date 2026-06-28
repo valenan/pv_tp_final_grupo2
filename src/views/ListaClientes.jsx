@@ -9,7 +9,6 @@ import Form from 'react-bootstrap/Form';
 import Spinner from 'react-bootstrap/Spinner';
 import Alert from 'react-bootstrap/Alert';
 import '../assets/styles/listaClientes.css'
-import axios from 'axios';
 
 const ListaClientes = () => {
 
@@ -34,9 +33,8 @@ const ListaClientes = () => {
                     setClientes(datosParseados);
                 } else {
 
-                    const response = await axios.get('https://fakestoreapi.com/users');
-
-                    const data = response.data;
+                    const data = await clientesService.obtenerClientes();           
+                    
 
                     setAllClientes(data);
                     setClientes(data);
@@ -59,15 +57,27 @@ const ListaClientes = () => {
 
     }, []);
 
-    const agregarNuevoClienteALaLista = (nuevoCliente) => {
-        setAllClientes(prev => {
-            const listaActualizada = [nuevoCliente, ...prev];
-            localStorage.setItem('lista_clientes', JSON.stringify(listaActualizada));
-            return listaActualizada;
-        });
+   const agregarNuevoCliente = async (cliente) => {
+    try {
+        setError("");
 
-        setClientes(prev => [nuevoCliente, ...prev]);
-    };
+        const clienteCreado = await clientesService.crearCliente(cliente);
+
+        const nuevoCliente = {
+            ...cliente,
+            id: clienteCreado.id || Date.now()
+        };
+
+        const listaActualizada = [nuevoCliente, ...allClientes];
+
+        setAllClientes(listaActualizada);
+        setClientes(listaActualizada);
+        localStorage.setItem('lista_clientes', JSON.stringify(listaActualizada));
+    } catch (err) {
+        setError(err.message);
+    }
+};
+
 
     const [busqueda, setBusqueda] = useState("");
     const handleBusqueda = (e) => {
@@ -98,8 +108,7 @@ const ListaClientes = () => {
 
                 <Row className="mb-4">
                     <Col xs={12}>
-                        <FormularioCliente onClienteCreado={agregarNuevoClienteALaLista} />
-                    </Col>
+                    <FormularioCliente onSubmit={agregarNuevoCliente} />                                </Col>
                 </Row>
 
                 <hr />
