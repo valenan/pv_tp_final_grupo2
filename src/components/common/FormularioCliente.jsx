@@ -28,7 +28,7 @@ const FormularioCliente = ({ inicial, onSubmit }) => {
     }, [inicial]);
 
     const validarEmail = (email) => {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        return /^[^\s@]+@gmail\.com$/i.test(email);
     };
 
     const soloNumeros = (valor) => {
@@ -101,6 +101,12 @@ const FormularioCliente = ({ inicial, onSubmit }) => {
         e.preventDefault();
         if (validarFormulario()) {
             onSubmit(cliente);
+            alert(
+                "✅ Cliente agregado correctamente\n\n" +
+                "Nombre: " + cliente.name.firstname + " " + cliente.name.lastname + "\n" +
+                "Usuario: " + cliente.username + "\n" +
+                "Email: " + cliente.email
+);  
         }
     };
 
